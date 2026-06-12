@@ -33,9 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image_val = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        $new_name = time() . '_' . uniqid() . '.' . $ext;
-        if (move_uploaded_file($_FILES['image']['tmp_name'], '../uploads/products/' . $new_name)) {
-            $image_val = $new_name;
+        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif'];
+        if (in_array($ext, $allowed_ext, true)) {
+            // Absolute path — never depends on the working directory
+            $upload_dir = dirname(__DIR__, 2) . '/uploads/products/';
+            if (!is_dir($upload_dir)) {
+                @mkdir($upload_dir, 0755, true);
+            }
+            $new_name = time() . '_' . uniqid() . '.' . $ext;
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $new_name)) {
+                $image_val = $new_name;
+            } else {
+                $message = 'Image upload failed — check that uploads/products/ is writable by the web server.';
+            }
+        } else {
+            $message = 'Image type not allowed (use jpg, png, gif, webp or avif).';
         }
     }
 
