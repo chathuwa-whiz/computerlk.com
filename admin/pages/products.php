@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         $new_name = time() . '_' . uniqid() . '.' . $ext;
-        if (move_uploaded_file($_FILES['image']['tmp_name'], '../uploads/products/' . $new_name)) {
+        if (move_uploaded_file($_FILES['image']['tmp_name'], '../../uploads/products/' . $new_name)) {
             $image_val = $new_name;
         }
     }
@@ -173,7 +173,7 @@ $edit_row = $edit_id ? $conn->query("SELECT * FROM products WHERE id = $edit_id"
                     <tr>
                         <td class="ps-4">
                             <?php if(!empty($row['image'])): ?>
-                                <img src="../uploads/products/<?php echo htmlspecialchars($row['image']); ?>" alt="img" class="rounded shadow-sm" style="width: 45px; height: 45px; object-fit: cover;">
+                                <img src="../../uploads/products/<?php echo htmlspecialchars($row['image']); ?>" alt="img" class="rounded shadow-sm" style="width: 45px; height: 45px; object-fit: cover;">
                             <?php else: ?>
                                 <div class="bg-light d-flex justify-content-center align-items-center rounded shadow-sm" style="width: 45px; height: 45px;">
                                     <i class="bi bi-image text-muted"></i>
